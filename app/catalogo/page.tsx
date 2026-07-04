@@ -2,7 +2,8 @@
 import { Button } from "@/components/ui/button";
 import ProductoComponent from "./producto";
 import { useState } from "react";
-
+import { useEffect } from "react";
+import { useToken } from "@/providers/token-provider";
 interface producto {
     nombre: string
     precio: number
@@ -11,54 +12,27 @@ interface producto {
     imagen?: string
 }
 
-const Catalogo = () => {
-    const [productos, setProductos] = useState<producto[]>([
-        {
-            nombre: "Paracetamol",
-            descripcion: "Esta es la descripción",
-            descuento: true,
-            precio: 30
-        },
-        {
-            nombre: "Ibuprofeno",
-            descripcion: "Esta es la descripción",
-            descuento: true,
-            precio: 20
-        },
-        {
-            nombre: "Aspirina",
-            descripcion: "Esta es la descripción",
-            descuento: true,
-            precio: 15
-        }
-    ])
+const Catalogo = ({ producto }: { producto: producto }) => {
 
-    fetch("https://dominio.com/usuario/listar", {
-        method: "DELETE", headers: {
-            "authorization": "Bearer token"
-        }
-    }).then((r) => {
-        console.log(r)
-    }).catch((e) => {
-        console.log(e)
-    })
+    useEffect(() => {
+
+        fetch("http://localhost:8000/prueba", {
+            method: "GET"
+
+        }).then(async (res) => {
+            const data = await res.json();
+            console.log(data)
+        })
+
+    }, [])
+
 
     return (
         <div>
             <h1 className="text-sky-500 font-bold">
                 Catalogo
             </h1>
-            {
-                productos.map((producto, index) => {
-                    return (<ProductoComponent key={producto.nombre} prod={producto} />)
-                })
-            }
 
-            <Button onClick={() => {
-                setProductos(prev => ([...prev, { nombre: "nuevo", descripcion: "nuevo", descuento: false, precio: 20 }]))
-            }}>
-                Añadir nuevo producto
-            </Button>
 
         </div>
     )
